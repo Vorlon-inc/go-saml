@@ -1,11 +1,11 @@
 go-saml
-======
+=======
 
-[![Build Status](https://travis-ci.org/RobotsAndPencils/go-saml.svg?branch=master)](https://travis-ci.org/RobotsAndPencils/go-saml)
+*Forked from *https://github.com/RobotsAndPencils/go-saml*
 
 A just good enough SAML client library written in Go. This library is by no means complete and has been developed
 to solve several specific integration efforts. However, it's a start, and it would be great to see
-it evolve into a more fleshed out implemention.
+it evolve into a more fleshed out implementing.
 
 Inspired by the early work of [Matt Baird](https://github.com/mattbaird/gosaml).
 
@@ -18,10 +18,17 @@ The library supports:
 * validating signed Responses
 
 
-Installation
-------------
+### Prerequisites:
 
-    $ go get github.com/RobotsAndPencils/go-saml
+```bash
+sudo apt install xmlsec1
+```
+
+### Installation
+
+```bash
+go get github.com/RobotsAndPencils/go-saml
+```
 
 Here's a convenient way to generate a certificate:
 

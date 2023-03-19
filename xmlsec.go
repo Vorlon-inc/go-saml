@@ -2,7 +2,6 @@ package saml
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -29,7 +28,7 @@ func SignResponse(xml string, privateKeyPath string) (string, error) {
 
 func sign(xml string, privateKeyPath string, id string) (string, error) {
 
-	samlXmlsecInput, err := ioutil.TempFile(os.TempDir(), "tmpgs")
+	samlXmlsecInput, err := os.CreateTemp(os.TempDir(), "tmpgs")
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +37,7 @@ func sign(xml string, privateKeyPath string, id string) (string, error) {
 	samlXmlsecInput.WriteString(xml)
 	samlXmlsecInput.Close()
 
-	samlXmlsecOutput, err := ioutil.TempFile(os.TempDir(), "tmpgs")
+	samlXmlsecOutput, err := os.CreateTemp(os.TempDir(), "tmpgs")
 	if err != nil {
 		return "", err
 	}
@@ -55,7 +54,7 @@ func sign(xml string, privateKeyPath string, id string) (string, error) {
 		return "", errors.New(err.Error() + " : " + string(output))
 	}
 
-	samlSignedRequest, err := ioutil.ReadFile(samlXmlsecOutput.Name())
+	samlSignedRequest, err := os.ReadFile(samlXmlsecOutput.Name())
 	if err != nil {
 		return "", err
 	}
@@ -79,7 +78,7 @@ func VerifyRequestSignature(xml string, publicCertPath string) error {
 
 func verify(xml string, publicCertPath string, id string) error {
 	//Write saml to
-	samlXmlsecInput, err := ioutil.TempFile(os.TempDir(), "tmpgs")
+	samlXmlsecInput, err := os.CreateTemp(os.TempDir(), "tmpgs")
 	if err != nil {
 		return err
 	}

@@ -182,7 +182,7 @@ func NewAuthnRequest() *AuthnRequest {
 						XMLName: xml.Name{
 							Local: "samlsig:Transforms",
 						},
-						Transform: []Transform{Transform{
+						Transform: []Transform{{
 							XMLName: xml.Name{
 								Local: "samlsig:Transform",
 							},

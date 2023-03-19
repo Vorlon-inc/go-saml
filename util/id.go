@@ -1,6 +1,6 @@
 package util
 
-import "github.com/nu7hatch/gouuid"
+import uuid "github.com/nu7hatch/gouuid"
 
 // UUID generate a new V4 UUID
 func ID() string {

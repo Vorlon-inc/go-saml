@@ -140,7 +140,7 @@ func NewSignedResponse() *Response {
 						XMLName: xml.Name{
 							Local: "samlsig:Transforms",
 						},
-						Transform: []Transform{Transform{
+						Transform: []Transform{{
 							XMLName: xml.Name{
 								Local: "samlsig:Transform",
 							},
@@ -280,7 +280,7 @@ func (r *Response) AddAudienceRestriction(value string) {
 		AudienceRestriction{XMLName: xml.Name{
 			Local: "saml:AudienceRestriction",
 		},
-			Audiences: []Audience{Audience{XMLName: xml.Name{
+			Audiences: []Audience{{XMLName: xml.Name{
 				Local: "saml:Audience",
 			},
 				Value: value,

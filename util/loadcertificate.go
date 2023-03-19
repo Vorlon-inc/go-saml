@@ -1,14 +1,14 @@
 package util
 
 import (
-	"io/ioutil"
+	"os"
 	"regexp"
 	"strings"
 )
 
 // LoadCertificate from file system
 func LoadCertificate(certPath string) (string, error) {
-	b, err := ioutil.ReadFile(certPath)
+	b, err := os.ReadFile(certPath)
 	if err != nil {
 		return "", err
 	}
