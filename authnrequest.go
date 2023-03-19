@@ -28,7 +28,10 @@ func ParseCompressedEncodedRequest(b64RequestXML string) (*AuthnRequest, error) 
 	if err != nil {
 		return nil, err
 	}
-	bXML := decompress(compressedXML)
+	bXML, err := decompress(compressedXML)
+	if err != nil {
+		return nil, err
+	}
 
 	err = xml.Unmarshal(bXML, &authnRequest)
 	if err != nil {
@@ -261,7 +264,10 @@ func (r *AuthnRequest) CompressedEncodedSignedString(privateKeyPath string) (str
 	if err != nil {
 		return "", err
 	}
-	compressed := compress([]byte(signed))
+	compressed, err := compress([]byte(signed))
+	if err != nil {
+		return "", err
+	}
 	b64XML := base64.StdEncoding.EncodeToString(compressed)
 	return b64XML, nil
 }
@@ -280,7 +286,10 @@ func (r *AuthnRequest) CompressedEncodedString() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	compressed := compress([]byte(saml))
+	compressed, err := compress([]byte(saml))
+	if err != nil {
+		return "", err
+	}
 	b64XML := base64.StdEncoding.EncodeToString(compressed)
 	return b64XML, nil
 }

@@ -7,34 +7,64 @@ import (
 	"strings"
 )
 
-func compressString(in string) string {
+func compressString(in string) (string, error) {
 	buf := new(bytes.Buffer)
-	compressor, _ := flate.NewWriter(buf, 9)
-	compressor.Write([]byte(in))
-	compressor.Close()
-	return buf.String()
+	compressor, err := flate.NewWriter(buf, 9)
+	if err != nil {
+		return "", err
+	}
+	_, err = compressor.Write([]byte(in))
+	if err != nil {
+		return "", err
+	}
+	err = compressor.Close()
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
 
-func decompressString(in string) string {
+func decompressString(in string) (string, error) {
 	buf := new(bytes.Buffer)
 	decompressor := flate.NewReader(strings.NewReader(in))
-	io.Copy(buf, decompressor)
-	decompressor.Close()
-	return buf.String()
+	_, err := io.Copy(buf, decompressor)
+	if err != nil {
+		return "", err
+	}
+	err = decompressor.Close()
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
 
-func compress(in []byte) []byte {
+func compress(in []byte) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	compressor, _ := flate.NewWriter(buf, 9)
-	compressor.Write(in)
-	compressor.Close()
-	return buf.Bytes()
+	compressor, err := flate.NewWriter(buf, 9)
+	if err != nil {
+		return nil, err
+	}
+	_, err = compressor.Write(in)
+	if err != nil {
+		return nil, err
+	}
+	err = compressor.Close()
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
-func decompress(in []byte) []byte {
+func decompress(in []byte) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	decompressor := flate.NewReader(bytes.NewReader(in))
-	io.Copy(buf, decompressor)
-	decompressor.Close()
-	return buf.Bytes()
+	_, err := io.Copy(buf, decompressor)
+	if err != nil {
+		return nil, err
+	}
+	err = decompressor.Close()
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
