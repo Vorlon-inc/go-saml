@@ -22,10 +22,11 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt install xmlsec1 -y
+        sudo mkdir -p /opt/go
 
     - name: Build
-      run: |        
-        export GOPATH=~/go
-        mkdir $GOPATH
+      run: |                
         go build -v ./...
         go test -v ./...      
+      env:
+         GOPATH: /opt/go

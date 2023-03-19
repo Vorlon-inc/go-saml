@@ -1,6 +1,8 @@
 go-saml
 =======
 
+[![Go](https://github.com/Vorlon-inc/go-saml/actions/workflows/go.yml/badge.svg)](https://github.com/Vorlon-inc/go-saml/actions/workflows/go.yml)
+
 *Forked from *https://github.com/RobotsAndPencils/go-saml*
 
 A just good enough SAML client library written in Go. This library is by no means complete and has been developed
