@@ -1,4 +1,4 @@
-package util
+package saml
 
 import (
 	"os"
@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// LoadCertificate from file system
-func LoadCertificate(certPath string) (string, error) {
+// loadCertificate from file system
+func loadCertificate(certPath string) (string, error) {
 	b, err := os.ReadFile(certPath)
 	if err != nil {
 		return "", err

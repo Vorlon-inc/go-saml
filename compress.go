@@ -1,4 +1,4 @@
-package util
+package saml
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func CompressString(in string) string {
+func compressString(in string) string {
 	buf := new(bytes.Buffer)
 	compressor, _ := flate.NewWriter(buf, 9)
 	compressor.Write([]byte(in))
@@ -15,7 +15,7 @@ func CompressString(in string) string {
 	return buf.String()
 }
 
-func DecompressString(in string) string {
+func decompressString(in string) string {
 	buf := new(bytes.Buffer)
 	decompressor := flate.NewReader(strings.NewReader(in))
 	io.Copy(buf, decompressor)
@@ -23,7 +23,7 @@ func DecompressString(in string) string {
 	return buf.String()
 }
 
-func Compress(in []byte) []byte {
+func compress(in []byte) []byte {
 	buf := new(bytes.Buffer)
 	compressor, _ := flate.NewWriter(buf, 9)
 	compressor.Write(in)
@@ -31,7 +31,7 @@ func Compress(in []byte) []byte {
 	return buf.Bytes()
 }
 
-func Decompress(in []byte) []byte {
+func decompress(in []byte) []byte {
 	buf := new(bytes.Buffer)
 	decompressor := flate.NewReader(bytes.NewReader(in))
 	io.Copy(buf, decompressor)

@@ -1,4 +1,4 @@
-package util
+package saml
 
 import (
 	"testing"
@@ -8,16 +8,16 @@ import (
 
 func TestCompressString(t *testing.T) {
 	expected := "This is the test string"
-	compressed := CompressString(expected)
-	decompressed := DecompressString(compressed)
+	compressed := compressString(expected)
+	decompressed := decompressString(compressed)
 	assert.Equal(t, expected, decompressed)
 	assert.True(t, len(compressed) > len(decompressed))
 }
 
 func TestCompress(t *testing.T) {
 	expected := []byte("This is the test string")
-	compressed := Compress(expected)
-	decompressed := Decompress(compressed)
+	compressed := compress(expected)
+	decompressed := decompress(compressed)
 	assert.Equal(t, expected, decompressed)
 	assert.True(t, len(compressed) > len(decompressed))
 }

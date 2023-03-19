@@ -1,9 +1,9 @@
 package saml
 
-import "github.com/Vorlon-inc/go-saml/util"
+import "errors"
 
 // ServiceProviderSettings provides settings to configure server acting as a SAML Service Provider.
-// Expect only one IDP per SP in this configuration. If you need to configure multipe IDPs for an SP
+// Expect only one IDP per SP in this configuration. If you need to configure multiple IDPs for an SP
 // then configure multiple instances of this module
 type ServiceProviderSettings struct {
 	PublicCertPath              string
@@ -23,49 +23,50 @@ type ServiceProviderSettings struct {
 type IdentityProviderSettings struct {
 }
 
-func (s *ServiceProviderSettings) Init() (err error) {
+func (s *ServiceProviderSettings) Init() error {
 	if s.hasInit {
 		return nil
 	}
 	s.hasInit = true
 
+	var err error
 	if s.SPSignRequest {
-		s.publicCert, err = util.LoadCertificate(s.PublicCertPath)
+		s.publicCert, err = loadCertificate(s.PublicCertPath)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
-		s.privateKey, err = util.LoadCertificate(s.PrivateKeyPath)
+		s.privateKey, err = loadCertificate(s.PrivateKeyPath)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 
-	s.iDPPublicCert, err = util.LoadCertificate(s.IDPPublicCertPath)
+	s.iDPPublicCert, err = loadCertificate(s.IDPPublicCertPath)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	return nil
 }
 
-func (s *ServiceProviderSettings) PublicCert() string {
+func (s *ServiceProviderSettings) PublicCert() (string, error) {
 	if !s.hasInit {
-		panic("Must call ServiceProviderSettings.Init() first")
+		return "", errors.New("must call ServiceProviderSettings.Init() first")
 	}
-	return s.publicCert
+	return s.publicCert, nil
 }
 
-func (s *ServiceProviderSettings) PrivateKey() string {
+func (s *ServiceProviderSettings) PrivateKey() (string, error) {
 	if !s.hasInit {
-		panic("Must call ServiceProviderSettings.Init() first")
+		return "", errors.New("must call ServiceProviderSettings.Init() first")
 	}
-	return s.privateKey
+	return s.privateKey, nil
 }
 
-func (s *ServiceProviderSettings) IDPPublicCert() string {
+func (s *ServiceProviderSettings) IDPPublicCert() (string, error) {
 	if !s.hasInit {
-		panic("Must call ServiceProviderSettings.Init() first")
+		return "", errors.New("must call ServiceProviderSettings.Init() first")
 	}
-	return s.iDPPublicCert
+	return s.iDPPublicCert, nil
 }

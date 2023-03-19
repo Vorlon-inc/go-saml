@@ -5,8 +5,6 @@ import (
 	"encoding/xml"
 	"errors"
 	"time"
-
-	"github.com/Vorlon-inc/go-saml/util"
 )
 
 func ParseCompressedEncodedResponse(b64ResponseXML string) (*Response, error) {
@@ -15,7 +13,7 @@ func ParseCompressedEncodedResponse(b64ResponseXML string) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	bXML := util.Decompress(compressedXML)
+	bXML := decompress(compressedXML)
 	err = xml.Unmarshal(bXML, &authnResponse)
 	if err != nil {
 		return nil, err
@@ -101,7 +99,7 @@ func NewSignedResponse() *Response {
 		SAMLP:        "urn:oasis:names:tc:SAML:2.0:protocol",
 		SAML:         "urn:oasis:names:tc:SAML:2.0:assertion",
 		SAMLSIG:      "http://www.w3.org/2000/09/xmldsig#",
-		ID:           util.ID(),
+		ID:           newID(),
 		Version:      "2.0",
 		IssueInstant: time.Now().UTC().Format(time.RFC3339Nano),
 		Issuer: Issuer{
@@ -114,7 +112,7 @@ func NewSignedResponse() *Response {
 			XMLName: xml.Name{
 				Local: "samlsig:Signature",
 			},
-			Id: util.ID(),
+			Id: newID(),
 			SignedInfo: SignedInfo{
 				XMLName: xml.Name{
 					Local: "samlsig:SignedInfo",
@@ -202,7 +200,7 @@ func NewSignedResponse() *Response {
 			XSI:          "http://www.w3.org/2001/XMLSchema-instance",
 			SAML:         "urn:oasis:names:tc:SAML:2.0:assertion",
 			Version:      "2.0",
-			ID:           util.ID(),
+			ID:           newID(),
 			IssueInstant: time.Now().UTC().Format(time.RFC3339Nano),
 			Issuer: Issuer{
 				XMLName: xml.Name{
@@ -343,7 +341,7 @@ func (r *Response) CompressedEncodedSignedString(privateKeyPath string) (string,
 	if err != nil {
 		return "", err
 	}
-	compressed := util.Compress([]byte(signed))
+	compressed := compress([]byte(signed))
 	b64XML := base64.StdEncoding.EncodeToString(compressed)
 	return b64XML, nil
 }

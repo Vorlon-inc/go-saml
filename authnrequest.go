@@ -20,8 +20,6 @@ import (
 	"errors"
 	"net/url"
 	"time"
-
-	"github.com/Vorlon-inc/go-saml/util"
 )
 
 func ParseCompressedEncodedRequest(b64RequestXML string) (*AuthnRequest, error) {
@@ -30,7 +28,7 @@ func ParseCompressedEncodedRequest(b64RequestXML string) (*AuthnRequest, error) 
 	if err != nil {
 		return nil, err
 	}
-	bXML := util.Decompress(compressedXML)
+	bXML := decompress(compressedXML)
 
 	err = xml.Unmarshal(bXML, &authnRequest)
 	if err != nil {
@@ -81,19 +79,22 @@ func (r *AuthnRequest) Validate(publicCertPath string) error {
 }
 
 // GetSignedAuthnRequest returns a singed XML document that represents a AuthnRequest SAML document
-func (s *ServiceProviderSettings) GetAuthnRequest() *AuthnRequest {
+func (s *ServiceProviderSettings) GetAuthnRequest() (*AuthnRequest, error) {
+	var err error
 	r := NewAuthnRequest()
 	r.AssertionConsumerServiceURL = s.AssertionConsumerServiceURL
 	r.Destination = s.IDPSSOURL
 	r.Issuer.Url = s.IDPSSODescriptorURL
-	r.Signature.KeyInfo.X509Data.X509Certificate.Cert = s.PublicCert()
-
+	r.Signature.KeyInfo.X509Data.X509Certificate.Cert, err = s.PublicCert()
+	if err != nil {
+		return nil, err
+	}
 	if !s.SPSignRequest {
 		r.SAMLSIG = ""
 		r.Signature = nil
 	}
 
-	return r
+	return r, nil
 }
 
 // GetAuthnRequestURL generate a URL for the AuthnRequest to the IdP with the SAMLRequst parameter encoded
@@ -111,7 +112,7 @@ func GetAuthnRequestURL(baseURL string, b64XML string, state string) (string, er
 }
 
 func NewAuthnRequest() *AuthnRequest {
-	id := util.ID()
+	id := newID()
 	return &AuthnRequest{
 		XMLName: xml.Name{
 			Local: "samlp:AuthnRequest",
@@ -260,7 +261,7 @@ func (r *AuthnRequest) CompressedEncodedSignedString(privateKeyPath string) (str
 	if err != nil {
 		return "", err
 	}
-	compressed := util.Compress([]byte(signed))
+	compressed := compress([]byte(signed))
 	b64XML := base64.StdEncoding.EncodeToString(compressed)
 	return b64XML, nil
 }
@@ -279,7 +280,7 @@ func (r *AuthnRequest) CompressedEncodedString() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	compressed := util.Compress([]byte(saml))
+	compressed := compress([]byte(saml))
 	b64XML := base64.StdEncoding.EncodeToString(compressed)
 	return b64XML, nil
 }

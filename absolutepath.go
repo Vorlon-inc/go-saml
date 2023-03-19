@@ -1,4 +1,4 @@
-package util
+package saml
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/kardianos/osext"
 )
 
-func AbsolutePath(aPath string) string {
+func absolutePath(aPath string) string {
 	if path.IsAbs(aPath) {
 		return aPath
 	}

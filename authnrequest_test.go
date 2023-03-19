@@ -21,7 +21,8 @@ func TestGetSignedRequest(t *testing.T) {
 	assert.NoError(err)
 
 	// Construct an AuthnRequest
-	authnRequest := sp.GetAuthnRequest()
+	authnRequest, err := sp.GetAuthnRequest()
+	assert.NoError(err)
 	signedXML, err := authnRequest.SignedString(sp.PrivateKeyPath)
 	assert.NoError(err)
 	assert.NotEmpty(signedXML)
@@ -43,7 +44,7 @@ func TestGetUnsignedRequest(t *testing.T) {
 	assert.NoError(err)
 
 	// Construct an AuthnRequest
-	authnRequest := sp.GetAuthnRequest()
+	authnRequest, err := sp.GetAuthnRequest()
 	assert.NoError(err)
 	assert.NotEmpty(authnRequest)
 }

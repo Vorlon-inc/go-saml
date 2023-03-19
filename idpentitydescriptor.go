@@ -6,6 +6,10 @@ import (
 )
 
 func (s *ServiceProviderSettings) GetEntityDescriptor() (string, error) {
+	pCert, err := s.PublicCert()
+	if err != nil {
+		return "", err
+	}
 	d := EntityDescriptor{
 		XMLName: xml.Name{
 			Local: "md:EntityDescriptor",
@@ -43,7 +47,7 @@ func (s *ServiceProviderSettings) GetEntityDescriptor() (string, error) {
 							XMLName: xml.Name{
 								Local: "ds:X509Certificate",
 							},
-							Cert: s.PublicCert(),
+							Cert: pCert,
 						},
 					},
 				},
@@ -66,7 +70,7 @@ func (s *ServiceProviderSettings) GetEntityDescriptor() (string, error) {
 							XMLName: xml.Name{
 								Local: "ds:X509Certificate",
 							},
-							Cert: s.PublicCert(),
+							Cert: pCert,
 						},
 					},
 				},

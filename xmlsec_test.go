@@ -4,13 +4,12 @@ import (
 	"encoding/xml"
 	"testing"
 
-	"github.com/Vorlon-inc/go-saml/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRequest(t *testing.T) {
 	assert := assert.New(t)
-	cert, err := util.LoadCertificate("./default.crt")
+	cert, err := loadCertificate("./default.crt")
 	assert.NoError(err)
 
 	// Construct an AuthnRequest
@@ -31,7 +30,7 @@ func TestRequest(t *testing.T) {
 
 func TestResponse(t *testing.T) {
 	assert := assert.New(t)
-	cert, err := util.LoadCertificate("./default.crt")
+	cert, err := loadCertificate("./default.crt")
 	assert.NoError(err)
 
 	// Construct an AuthnRequest
