@@ -24,8 +24,8 @@ jobs:
         sudo apt install xmlsec1 -y
 
     - name: Build
-      run: |
-        cd ${{ github.workspace }}
-        go env
+      run: |        
+        export GOPATH=~/go
+        mkdir $GOPATH
         go build -v ./...
-        go test -v ./...
+        go test -v ./...      
