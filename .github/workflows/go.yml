@@ -21,13 +21,9 @@ jobs:
     - name: Install prerequisites
       run: |
         sudo apt-get update -y
-        sudo apt install xmlsec1 -y
-        sudo mkdir -p /opt/go
+        sudo apt install xmlsec1 -y        
 
     - name: Build
-      run: |         
-        go get -v ./...       
-        go build -v ./...
-        go test -v ./...      
-      env:
-         GOPATH: /opt/go
+      run: |                 
+        go build 
+        go test ./...              
