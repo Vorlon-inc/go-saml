@@ -79,8 +79,8 @@ func VerifyResponseSignatureCert(xml string, cert string) error {
 // VerifyRequestSignature verify signature of a SAML 2.0 AuthnRequest document
 // `publicCertPath` must be a path on the filesystem, xmlsec1 is run out of process
 // through `exec`
-func VerifyRequestSignature(xml string, publicCert string) error {
-	return verify(xml, publicCert, xmlRequestID)
+func VerifyRequestSignature(xml string, publicCertPath string) error {
+	return verify(xml, publicCertPath, xmlRequestID)
 }
 
 func verify(xml string, publicCertPath string, id string) error {
