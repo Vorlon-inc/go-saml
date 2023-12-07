@@ -14,10 +14,15 @@ func loadCertificate(certPath string) (string, error) {
 	}
 	cert := string(b)
 
+	return cleanCertificate(cert), nil
+}
+
+// cleanCertificate clean given certificate
+func cleanCertificate(cert string) string {
 	re := regexp.MustCompile("---(.*)CERTIFICATE(.*)---")
 	cert = re.ReplaceAllString(cert, "")
 	cert = strings.Trim(cert, " \n")
 	cert = strings.Replace(cert, "\n", "", -1)
 
-	return cert, nil
+	return cert
 }
