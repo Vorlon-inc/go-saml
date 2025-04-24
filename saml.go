@@ -7,13 +7,10 @@ import "errors"
 // then configure multiple instances of this module
 type ServiceProviderSettings struct {
 	PublicCertPath              string
-	RawPublicCert               string
 	PrivateKeyPath              string
-	RawPrivateKey               string
 	IDPSSOURL                   string
 	IDPSSODescriptorURL         string
 	IDPPublicCertPath           string
-	RawIDPPublicCert            string
 	AssertionConsumerServiceURL string
 	SPSignRequest               bool
 
@@ -34,32 +31,20 @@ func (s *ServiceProviderSettings) Init() error {
 
 	var err error
 	if s.SPSignRequest {
-		if s.RawPublicCert != "" {
-			s.publicCert = cleanCertificate(s.RawPublicCert)
-		} else {
-			s.publicCert, err = loadCertificate(s.PublicCertPath)
-			if err != nil {
-				return err
-			}
-		}
-
-		if s.RawPrivateKey != "" {
-			s.privateKey = cleanCertificate(s.RawPrivateKey)
-		} else {
-			s.privateKey, err = loadCertificate(s.PrivateKeyPath)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	if s.RawIDPPublicCert != "" {
-		s.iDPPublicCert = cleanCertificate(s.RawIDPPublicCert)
-	} else {
-		s.iDPPublicCert, err = loadCertificate(s.IDPPublicCertPath)
+		s.publicCert, err = loadCertificate(s.PublicCertPath)
 		if err != nil {
 			return err
 		}
+
+		s.privateKey, err = loadCertificate(s.PrivateKeyPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	s.iDPPublicCert, err = loadCertificate(s.IDPPublicCertPath)
+	if err != nil {
+		return err
 	}
 
 	return nil
