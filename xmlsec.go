@@ -95,7 +95,7 @@ func verify(xml string, publicCertPath string, id string) error {
 	defer deleteTempFile(samlXmlsecInput.Name())
 
 	//fmt.Println("xmlsec1", "--verify", "--pubkey-cert-pem", publicCertPath, "--id-attr:ID", id, samlXmlsecInput.Name())
-	_, err = exec.Command("xmlsec1", "--verify", "--pubkey-cert-pem", publicCertPath, "--id-attr:ID", id, "--enabled-key-data x509", samlXmlsecInput.Name()).CombinedOutput()
+	_, err = exec.Command("xmlsec1", "--verify", "--pubkey-cert-pem", publicCertPath, "--id-attr:ID", id, "--enabled-key-data", "x509", samlXmlsecInput.Name()).CombinedOutput()
 	if err != nil {
 		return errors.New("error verifing signature: " + err.Error())
 	}
@@ -130,7 +130,7 @@ func verifyCert(xml string, cert string, id string) error {
 	certFile.Close()
 
 	// Call xmlsec1 command with cert data
-	_, err = exec.Command("xmlsec1", "--verify", "--pubkey-cert-pem", certFile.Name(), "--id-attr:ID", id, samlXmlsecInput.Name()).CombinedOutput()
+	_, err = exec.Command("xmlsec1", "--verify", "--pubkey-cert-pem", certFile.Name(), "--id-attr:ID", id, "--enabled-key-data", "x509", samlXmlsecInput.Name()).CombinedOutput()
 	if err != nil {
 		return errors.New("error verifying signature: " + err.Error())
 	}
