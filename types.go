@@ -19,7 +19,7 @@ type AuthnRequest struct {
 	NameIDPolicy                   NameIDPolicy          `xml:"NameIDPolicy"`
 	RequestedAuthnContext          RequestedAuthnContext `xml:"RequestedAuthnContext"`
 	Signature                      *Signature            `xml:"Signature,omitempty"`
-	originalString                 string
+	OriginalString                 string
 }
 
 type Issuer struct {

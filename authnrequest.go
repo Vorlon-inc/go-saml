@@ -40,7 +40,7 @@ func ParseCompressedEncodedRequest(b64RequestXML string) (*AuthnRequest, error) 
 
 	// There is a bug with XML namespaces in Go that's causing XML attributes with colons to not be roundtrip
 	// marshal and unmarshaled so we'll keep the original string around for validation.
-	authnRequest.originalString = string(bXML)
+	authnRequest.OriginalString = string(bXML)
 	return &authnRequest, nil
 
 }
@@ -58,7 +58,7 @@ func ParseEncodedRequest(b64RequestXML string) (*AuthnRequest, error) {
 
 	// There is a bug with XML namespaces in Go that's causing XML attributes with colons to not be roundtrip
 	// marshal and unmarshaled so we'll keep the original string around for validation.
-	authnRequest.originalString = string(bytesXML)
+	authnRequest.OriginalString = string(bytesXML)
 	return &authnRequest, nil
 }
 
@@ -73,7 +73,7 @@ func (r *AuthnRequest) Validate(publicCertPath string) error {
 
 	// TODO more validation
 
-	err := VerifyRequestSignature(r.originalString, publicCertPath)
+	err := VerifyRequestSignature(r.OriginalString, publicCertPath)
 	if err != nil {
 		return err
 	}
