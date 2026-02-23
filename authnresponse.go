@@ -49,7 +49,7 @@ func ParseEncodedResponse(b64ResponseXML string) (*Response, error) {
 
 func (r *Response) Validate(s *ServiceProviderSettings) error {
 	if r.Version != "2.0" {
-		return errors.New("unsupported SAML Version")
+		return errors.New("unsupported SAML Version. We expect version 2.0")
 	}
 
 	if len(r.ID) == 0 {
@@ -57,11 +57,11 @@ func (r *Response) Validate(s *ServiceProviderSettings) error {
 	}
 
 	if len(r.Assertion.ID) == 0 {
-		return errors.New("no Assertions")
+		return errors.New("no Assertions. We expect 3 assertions to be mapped from idp: 'email', 'firstName', 'lastName'. If you are using group mappings, add the 'groups' attribute to the assertion as well.")
 	}
 
 	if len(r.Signature.SignatureValue.Value) == 0 {
-		return errors.New("no signature")
+		return errors.New("no signature. We expect the response to be signed by the idp, not just the assertion")
 	}
 
 	if r.Destination != s.AssertionConsumerServiceURL {
@@ -79,12 +79,12 @@ func (r *Response) Validate(s *ServiceProviderSettings) error {
 	if s.RawIDPPublicCert != "" {
 		err := VerifyResponseSignatureCert(r.originalString, s.RawIDPPublicCert)
 		if err != nil {
-			return err
+			return errors.New("signature verification failed. Make sure you enter the idp public certificate correctly (starts with '-----BEGIN CERTIFICATE-----' and ends with '-----END CERTIFICATE-----'). error: " + err.Error())
 		}
 	} else {
 		err := VerifyResponseSignature(r.originalString, s.IDPPublicCertPath)
 		if err != nil {
-			return err
+			return errors.New("signature verification failed. Make sure the idp public certificate is loaded correctly from filesystem and is in the correct format (starts with '-----BEGIN CERTIFICATE-----' and ends with '-----END CERTIFICATE-----'). error: " + err.Error())
 		}
 	}
 
