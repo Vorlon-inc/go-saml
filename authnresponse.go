@@ -69,7 +69,7 @@ func (r *Response) Validate(s *ServiceProviderSettings) error {
 	}
 
 	if r.Assertion.Subject.SubjectConfirmation.Method != "urn:oasis:names:tc:SAML:2.0:cm:bearer" {
-		return errors.New("assertion method exception")
+		return errors.New("assertion method exception. expected: 'urn:oasis:names:tc:SAML:2.0:cm:bearer' not " + r.Assertion.Subject.SubjectConfirmation.Method)
 	}
 
 	if r.Assertion.Subject.SubjectConfirmation.SubjectConfirmationData.Recipient != s.AssertionConsumerServiceURL {
